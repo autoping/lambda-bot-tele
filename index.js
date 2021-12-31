@@ -24,7 +24,7 @@ bot.start((ctx) => {
 });
 bot.help((ctx) =>
     ctx.reply('I m an autoping telegram bot. I will message you if someone want to. Now i understand only /start command. I can not answer back. '));
-bot.on('text', ctx => ctx.reply('Sorry, did not understand you'));
+bot.on('text', ctx => ctx.reply('Sorry, can not understand you'));
 bot.launch();
 
 // Enable graceful stop
