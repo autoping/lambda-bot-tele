@@ -2,35 +2,34 @@
 
 const AWS = require("aws-sdk");
 const uuid = require("uuid");
-
-const TelegramBot = require('node-telegram-bot-api'); // подключаем node-telegram-bot-api
+const {Telegraf} = require('telegraf')
 
 const token = '5064483062:AAHPh_imIdtdZmfaL_xQc2Sk584byqSeAuo'; // тут токен кторый мы получили от botFather
+const bot = new Telegraf(token);
 
-// включаем самого обота
-const bot = new TelegramBot(token, {polling: true});
+bot.start((ctx) => {
+    let from = ctx.message.from;
+    let text = ctx.message.text;
+    let uid = text.split(' ')[1];
 
+    ctx.reply('Welcome ' + from.first_name);
+    if (uid) {
+        ctx.reply('You are linked to this bot successfuly. Id is ' + uid);
+    }
+    if (!uid) {
+        ctx.reply('Can not link, there is no id');
+    }
 
-// обработчик события присылания нам любого сообщения
-// bot.on('message', (msg) => {
-//     const chatId = msg.chat.id; //получаем идентификатор диалога, чтобы отвечать именно тому пользователю, который нам что-то прислал
-// console.log(msg);
-//     // отправляем сообщение
-//     bot.sendMessage(chatId, 'Привет, Друг!');
-// });
-
-bot.onText(/\/start/, (msg) => {
-    console.log(msg.text)
-    const chatId = msg.chat.id;
-    var arr = msg.text.split(' ');
-
-    var id = arr[1];
-
-    let result = bot.sendMessage(chatId, "Welcome, user with id "+ id + " chat.id = " + chatId);
-
-    console.log();
 
 });
+bot.help((ctx) => ctx.reply('I m an autoping telegram bot. I will message you if someone want to. Now i understand only /start command. I can not answer back. '));
+
+bot.launch();
+
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
 
 module.exports.sendMessage = async (event) => {
     const input = JSON.parse(event.body);
@@ -38,8 +37,12 @@ module.exports.sendMessage = async (event) => {
     const message = input.message;
 
 
-   let result = await bot.sendMessage(chatId, message);
+    let result = await bot.telegram.sendMessage(chatId, message);
 
+    //todo handle errors
+    result.catch(reason => {
+        console.log(reason);
+    });
     return {
         statusCode: 201,
         headers: {
