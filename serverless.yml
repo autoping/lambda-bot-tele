@@ -8,6 +8,8 @@ provider:
   region: eu-central-1
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
+  environment:
+    TOKEN: "fake_token"
 
 functions:
   sendMessage:
@@ -17,6 +19,12 @@ functions:
           path: messages
           method: post
           cors: true
+  sendMessageNew:
+    handler: handler.sendMessage
+    events:
+      - http:
+          path: v2/messages
+          method: post
 
 plugins:
   - serverless-ignore
