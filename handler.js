@@ -7,6 +7,7 @@ const baseUrl = "https://api.telegram.org/bot" + token;
 
 async function send(messageRequest) {
   try {
+    console.log("Sending message request: " + JSON.stringify(messageRequest));
     return await axios.post(baseUrl + "/sendMessage", messageRequest);
   } catch (err) {
     console.error("Error occured while sending Telegram message: " + JSON.stringify(err));
@@ -20,7 +21,7 @@ module.exports.receiveMessage = async (event) => {
     chat_id: event.body.message.chat.id,
     text: JSON.stringify(event.body)
   };
-  send(messageRequest);
+  await send(messageRequest);
 }
 
 module.exports.sendMessage = async (event) => {
@@ -30,5 +31,5 @@ module.exports.sendMessage = async (event) => {
     chat_id: input.chatId,
     text: input.message
   };
-  send(messageRequest);
+  await send(messageRequest);
 }
