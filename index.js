@@ -1,10 +1,8 @@
 'use strict';
 
-const AWS = require("aws-sdk");
-const uuid = require("uuid");
 const {Telegraf} = require('telegraf')
 
-const token = '5064483062:AAHPh_imIdtdZmfaL_xQc2Sk584byqSeAuo'; // тут токен кторый мы получили от botFather
+const token = 'some_secret_token';
 const bot = new Telegraf(token);
 
 bot.start((ctx) => {
@@ -54,4 +52,3 @@ module.exports.sendMessage = async (event) => {
         body: JSON.stringify(statusMessage)
     };
 };
-
