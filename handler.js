@@ -6,7 +6,8 @@ const token = process.env.TOKEN
 const baseUrl = "https://api.telegram.org/bot" + token;
 
 module.exports.receiveMessage = async (event) => {
-  console.log("Inbound message received: " + event.body);
+  const input = JSON.parse(event.body);
+  console.log("Inbound message received: " + JSON.stringify(input));
 }
 
 module.exports.sendMessage = async (event) => {
