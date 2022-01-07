@@ -5,7 +5,7 @@ const axios = require('axios');
 const token = process.env.TOKEN
 const baseUrl = "https://api.telegram.org/bot" + token;
 
-function send(messageRequest) {
+async function send(messageRequest) {
   try {
     return await axios.post(baseUrl + "/sendMessage", messageRequest);
   } catch (err) {
@@ -24,6 +24,7 @@ module.exports.receiveMessage = async (event) => {
 }
 
 module.exports.sendMessage = async (event) => {
+  console.log("Outbound message received: " + JSON.stringify(event.body));
   const input = JSON.parse(event.body);
   const messageRequest = {
     chat_id: input.chatId,
