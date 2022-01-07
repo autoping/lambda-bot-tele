@@ -3,6 +3,9 @@
 .npmignore
 .slsignore
 
+# GitHub workflows
+.github
+
 # Node project
 package.json
 package-lock.json
