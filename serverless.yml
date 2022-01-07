@@ -27,6 +27,7 @@ functions:
       - http:
           path: messages/outbound
           method: post
+          async: true
 
 plugins:
   - serverless-ignore
