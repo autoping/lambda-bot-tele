@@ -1,0 +1,11 @@
+# Ignore files
+.gitignore
+.npmignore
+.slsignore
+
+# Node project
+package.json
+package-lock.json
+
+# Miscellaneous
+README.md

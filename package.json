@@ -1,5 +1,5 @@
 {
-  "name": "tg_bot",
+  "name": "autoping-lambda-tele-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1048.0",
-    "serverless-offline": "^8.3.1",
     "telegraf": "^4.5.2"
+  },
+  "devDependencies": {
+    "serverless-ignore": "^0.2.1",
+    "serverless-offline": "^8.3.1"
   }
 }
