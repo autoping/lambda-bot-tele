@@ -12,18 +12,20 @@ provider:
     TOKEN: "fake_token"
 
 functions:
-  sendMessage:
-    handler: index.sendMessage
+
+  receiveMessage:
+    handler: handler.receiveMessage
     events:
       - http:
-          path: messages
+          path: messages/inbound
           method: post
-          cors: true
-  sendMessageNew:
+          async: true
+
+  sendMessage:
     handler: handler.sendMessage
     events:
       - http:
-          path: v2/messages
+          path: messages/outbound
           method: post
 
 plugins:
