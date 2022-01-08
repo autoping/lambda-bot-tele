@@ -1,6 +1,10 @@
 service: autoping-lambda-bot-tele
 
 frameworkVersion: '2'
+variablesResolutionMode: 20210326
+
+custom:
+  secret: ${ssm:/aws/reference/secretsmanager/dev/autoping/telebot}
 
 provider:
   name: aws
@@ -9,7 +13,7 @@ provider:
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   environment:
-    TOKEN: "fake_token"
+    TOKEN: ${self:custom.secret.token}
 
 functions:
 
