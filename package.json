@@ -1,8 +1,8 @@
 {
   "name": "autoping-lambda-tele-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "Telegram bot handler to be used for inbound/oubound messaging",
+  "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.24.0",
-    "telegraf": "^4.5.2"
+    "axios": "^0.24.0"
   },
   "devDependencies": {
+    "serverless": "^2.70.0",
     "serverless-ignore": "^0.2.1",
     "serverless-offline": "^8.3.1"
   }
