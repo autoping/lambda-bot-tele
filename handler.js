@@ -11,7 +11,7 @@ async function send(messageRequest) {
     return await axios.post(baseUrl + "/sendMessage", messageRequest);
   } catch (err) {
     console.error("Error occured while sending Telegram message: " + JSON.stringify(err));
-    // TODO: maybe throw further?
+    throw err;
   }
 }
 
@@ -29,7 +29,7 @@ module.exports.sendMessage = async (event) => {
   const input = JSON.parse(event.body);
   const messageRequest = {
     chat_id: input.chatId,
-    text: input.message
+    text: input.text
   };
   await send(messageRequest);
 }
