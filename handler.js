@@ -19,17 +19,16 @@ module.exports.receiveMessage = async (event) => {
   console.log("Inbound message received: " + JSON.stringify(event.body));
   const messageRequest = {
     chat_id: event.body.message.chat.id,
-    text: JSON.stringify(event.body)
+    text: "Autoping Loopback: " + JSON.stringify(event.body)
   };
   await send(messageRequest);
 }
 
 module.exports.sendMessage = async (event) => {
   console.log("Outbound message received: " + JSON.stringify(event.body));
-  const input = JSON.parse(event.body);
   const messageRequest = {
-    chat_id: input.chatId,
-    text: input.text
+    chat_id: event.body.chatId,
+    text: event.body.text
   };
   await send(messageRequest);
 }
