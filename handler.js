@@ -5,9 +5,8 @@ const axios = require('axios');
 const token = process.env.TOKEN
 const baseUrl = "https://api.telegram.org/bot" + token;
 
-
 const AWS = require("aws-sdk");
-const dynamoDB = new AWS.DynamoDB({ region: "eu-central-1" });
+const dynamoDB = new AWS.DynamoDB.DocumentClient({region: "eu-central-1"});
 
 async function send(messageRequest) {
   try {
