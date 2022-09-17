@@ -5,6 +5,11 @@ const axios = require('axios');
 const token = process.env.TOKEN
 const baseUrl = "https://api.telegram.org/bot" + token;
 
+
+const AWS = require("aws-sdk");
+const dynamoDB = new AWS.DynamoDB({ region: "eu-central-1" });
+
+
 async function send(messageRequest) {
   try {
     console.log("Sending message request: " + JSON.stringify(messageRequest));
@@ -13,6 +18,12 @@ async function send(messageRequest) {
     console.error("Error occured while sending Telegram message: " + JSON.stringify(err));
     throw err;
   }
+}
+
+async function scan() {
+  return await dynamoDB
+      .scan({TableName: "autoping-cards",})
+      .promise();
 }
 
 module.exports.receiveOutboundMessage = async (event) => {
@@ -26,10 +37,13 @@ module.exports.receiveOutboundMessage = async (event) => {
 
 module.exports.sendInboundMessage = async (event) => {
   console.log("Inbound message received (from API): " + JSON.stringify(event.body));
+
+  const someText = JSON.stringify(await scan());
+
   const messageRequest = {
     chat_id: event.body.chatId,
     parse_mode: "markdown",
-    text: event.body.text
+    text: someText
   };
   await send(messageRequest);
 }
