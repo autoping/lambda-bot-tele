@@ -76,14 +76,45 @@ async function findCard(cardId) {
     .promise();
 }
 
+async function findDialog(chatId) {
+  return await dynamoDB
+    .get({
+      TableName: "autoping-dialogs",
+      Key: {
+        chatId: chatId,
+      },
+    })
+    .promise();
+}
+
 module.exports.receiveOutboundMessage = async (event) => {
   console.log("Outbound message received (webhook): " + JSON.stringify(event.body));
+
+  const chatId = event.body.message.chat.id;
+  const messageId = chatId + "-" + event.body.update_id;
+
+  const dialog = (await findDialog(chatId)).Item;
+  console.log("Dialog: " + JSON.stringify(dialog));
+
+  const cardId = dialog.cardId;
+  const initiatorId = dialog.initiatorId;
+
+  const message = {
+    id: messageId,
+    text: event.body.message.text,
+    createAt: event.body.message.date,
+    cardId: cardId,
+    initiatorId: initiatorId,
+    inbound: false
+  }
+
+  await produce(JSON.stringify(event.body), chatId, messageId);
+
   const messageRequest = {
     chat_id: event.body.message.chat.id,
-    text: "Autoping Loopback: " + JSON.stringify(event.body)
+    text: "Test Loopback: " + JSON.stringify(event.body)
   };
   await send(messageRequest);
-  await produce(JSON.stringify(event.body), "test", "test");
 }
 
 module.exports.sendInboundMessage = async (event) => {
