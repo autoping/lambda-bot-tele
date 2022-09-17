@@ -90,7 +90,7 @@ async function findDialog(chatId) {
 module.exports.receiveOutboundMessage = async (event) => {
   console.log("Outbound message received (webhook): " + JSON.stringify(event.body));
 
-  const chatId = event.body.message.chat.id;
+  const chatId = "" + event.body.message.chat.id;
   const messageId = chatId + "-" + event.body.update_id;
 
   const dialog = (await findDialog(chatId)).Item;
@@ -108,7 +108,7 @@ module.exports.receiveOutboundMessage = async (event) => {
     inbound: false
   }
 
-  await produce(JSON.stringify(event.body), chatId, messageId);
+  await produce(JSON.stringify(message), chatId, messageId);
 
   const messageRequest = {
     chat_id: event.body.message.chat.id,
