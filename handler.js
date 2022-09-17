@@ -120,6 +120,8 @@ module.exports.receiveOutboundMessage = async (event) => {
 
 async function handleInboundMessage(message) {
 
+  console.log("Handling inbound message: " + JSON.stringify(message));
+
   const cardId = message.cardId;
 
   const card = (await findCard(cardId)).Item;
@@ -146,11 +148,16 @@ async function handleInboundMessage(message) {
 }
 
 module.exports.handleInboundMessageHttp = async (event) => {
-  console.log("Inbound message received (from API): " + JSON.stringify(event.body));
-  await handleInboundMessage(event.body);  
+  const message = event.body;
+  console.log("Inbound message received (from API): " + JSON.stringify(message));
+  await handleInboundMessage(message);  
 }
 
 module.exports.handleInboundMessageSqs = async (event) => {
-  console.log("Inbound message received (from SQS): " + JSON.stringify(event));
-  await handleInboundMessage(event);
+  const records = event.Records;
+  for (var i = 0; i < records.length; i++) {
+    const message = JSON.parse(records[i].body);
+    console.log("Inbound message received (from SQS): " + JSON.stringify(message));
+    await handleInboundMessage(message);
+  }
 }
