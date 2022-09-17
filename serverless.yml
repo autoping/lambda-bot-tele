@@ -37,14 +37,18 @@ functions:
           method: post
           async: true
 
-  sendInboundMessage:
-    handler: handler.sendInboundMessage
+  handleInboundMessageHttp:
+    handler: handler.handleInboundMessageHttp
     events:
-      - sqs: arn:aws:sqs:eu-central-1:587994125269:sqs-queue-autoping-inbound.fifo
       - http:
           path: messages/inbound
           method: post
           async: true
+
+  handleInboundMessageSqs:
+    handler: handler.handleInboundMessageSqs
+    events:
+      - sqs: arn:aws:sqs:eu-central-1:587994125269:sqs-queue-autoping-inbound.fifo
 
 resources:
   Resources:
