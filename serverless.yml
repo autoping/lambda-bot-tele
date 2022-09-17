@@ -33,7 +33,7 @@ functions:
           method: post
           async: true
 
-  sendMessage:
+  sendInboundMessage:
     handler: handler.sendInboundMessage
     events:
       - http:
@@ -43,6 +43,19 @@ functions:
 
 resources:
   Resources:
+    dialogs:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: autoping-dialogs
+        AttributeDefinitions:
+          - AttributeName: chatId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: chatId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     inbound:
       Type: "AWS::SQS::Queue"
       Properties:
