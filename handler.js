@@ -28,6 +28,7 @@ module.exports.sendInboundMessage = async (event) => {
   console.log("Inbound message received (from API): " + JSON.stringify(event.body));
   const messageRequest = {
     chat_id: event.body.chatId,
+    parse_mode: "markdown",
     text: event.body.text
   };
   await send(messageRequest);
