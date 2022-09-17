@@ -1,6 +1,6 @@
 service: autoping-lambda-bot-tele
 
-frameworkVersion: '2'
+frameworkVersion: '3'
 variablesResolutionMode: 20210326
 
 custom:
