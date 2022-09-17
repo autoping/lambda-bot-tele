@@ -17,19 +17,19 @@ provider:
 
 functions:
 
-  receiveMessage:
-    handler: handler.receiveMessage
+  receiveOutboundMessage:
+    handler: handler.receiveOutboundMessage
     events:
       - http:
-          path: messages/inbound
+          path: messages/outbound
           method: post
           async: true
 
   sendMessage:
-    handler: handler.sendMessage
+    handler: handler.sendInboundMessage
     events:
       - http:
-          path: messages/outbound
+          path: messages/inbound
           method: post
           async: true
 

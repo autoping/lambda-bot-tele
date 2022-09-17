@@ -15,8 +15,8 @@ async function send(messageRequest) {
   }
 }
 
-module.exports.receiveMessage = async (event) => {
-  console.log("Inbound message received: " + JSON.stringify(event.body));
+module.exports.receiveOutboundMessage = async (event) => {
+  console.log("Outbound message received (webhook): " + JSON.stringify(event.body));
   const messageRequest = {
     chat_id: event.body.message.chat.id,
     text: "Autoping Loopback: " + JSON.stringify(event.body)
@@ -24,8 +24,8 @@ module.exports.receiveMessage = async (event) => {
   await send(messageRequest);
 }
 
-module.exports.sendMessage = async (event) => {
-  console.log("Outbound message received: " + JSON.stringify(event.body));
+module.exports.sendInboundMessage = async (event) => {
+  console.log("Inbound message received (from API): " + JSON.stringify(event.body));
   const messageRequest = {
     chat_id: event.body.chatId,
     text: event.body.text
