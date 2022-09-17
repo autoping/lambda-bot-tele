@@ -38,12 +38,12 @@ resources:
     inbound:
       Type: "AWS::SQS::Queue"
       Properties:
-        QueueName: sqs-queue-autoping-inbound
+        QueueName: sqs-queue-autoping-inbound.fifo
         FifoQueue: true
     outbound:
       Type: "AWS::SQS::Queue"
       Properties:
-        QueueName: sqs-queue-autoping-outbound
+        QueueName: sqs-queue-autoping-outbound.fifo
         FifoQueue: true
 
 plugins:
