@@ -78,13 +78,13 @@ module.exports.sendInboundMessage = async (event) => {
 
   const cardId = event.body.cardId;
 
-  const card = await findCard(cardId);
+  const card = await findCard(cardId).Item;
   console.log("Card: " + JSON.stringify(card));
 
-  const asset = await findAsset(card.assetId);
+  const asset = await findAsset(card.assetId).Item;
   console.log("Asset: " + JSON.stringify(asset));
 
-  const user = await findUser(asset.userId);
+  const user = await findUser(asset.userId).Item;
   console.log("User: " + JSON.stringify(user));
 
   const chatId = user.chatId;
