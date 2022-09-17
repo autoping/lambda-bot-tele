@@ -33,6 +33,19 @@ functions:
           method: post
           async: true
 
+resources:
+  Resources:
+    inbound:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: sqs-queue-autoping-inbound
+        FifoQueue: true
+    outbound:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: sqs-queue-autoping-outbound
+        FifoQueue: true
+
 plugins:
   - serverless-ignore
   - serverless-offline
