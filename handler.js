@@ -102,7 +102,7 @@ module.exports.receiveOutboundMessage = async (event) => {
   const message = {
     id: messageId,
     text: event.body.message.text,
-    createAt: event.body.message.date,
+    createdAt: event.body.message.date,
     cardId: cardId,
     initiatorId: initiatorId,
     inbound: false

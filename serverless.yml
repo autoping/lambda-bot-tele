@@ -40,6 +40,7 @@ functions:
   sendInboundMessage:
     handler: handler.sendInboundMessage
     events:
+      - sqs: arn:aws:sqs:eu-central-1:587994125269:sqs-queue-autoping-outbound.fifo
       - http:
           path: messages/inbound
           method: post
