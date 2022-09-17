@@ -19,10 +19,12 @@ async function send(messageRequest) {
   }
 }
 
-async function produce(text) {
+async function produce(text, groupId, dedupId) {
   return await sqs
     .sendMessage({
       MessageBody: text,
+      MessageGroupId: groupId,
+      MessageDeduplicationId: dedupId,
       QueueUrl: "https://sqs.eu-central-1.amazonaws.com/587994125269/sqs-queue-autoping-outbound.fifo"
     })
     .promise();
@@ -81,7 +83,7 @@ module.exports.receiveOutboundMessage = async (event) => {
     text: "Autoping Loopback: " + JSON.stringify(event.body)
   };
   await send(messageRequest);
-  await produce(JSON.stringify(event.body));
+  await produce(JSON.stringify(event.body), "test", "test");
 }
 
 module.exports.sendInboundMessage = async (event) => {
