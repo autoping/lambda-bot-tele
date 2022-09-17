@@ -7,6 +7,7 @@ const baseUrl = "https://api.telegram.org/bot" + token;
 
 const AWS = require("aws-sdk");
 const dynamoDB = new AWS.DynamoDB.DocumentClient({region: "eu-central-1"});
+const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 async function send(messageRequest) {
   try {
@@ -16,6 +17,15 @@ async function send(messageRequest) {
     console.error("Error occured while sending Telegram message: " + JSON.stringify(err));
     throw err;
   }
+}
+
+async function produce(text) {
+  return await sqs
+    .sendMessage({
+      MessageBody: text,
+      QueueUrl: "https://sqs.eu-central-1.amazonaws.com/587994125269/sqs-queue-autoping-outbound.fifo"
+    })
+    .promise();
 }
 
 async function updateDialog(chatId, cardId, initiatorId) {
@@ -71,6 +81,7 @@ module.exports.receiveOutboundMessage = async (event) => {
     text: "Autoping Loopback: " + JSON.stringify(event.body)
   };
   await send(messageRequest);
+  await produce(JSON.stringify(event.body));
 }
 
 module.exports.sendInboundMessage = async (event) => {
