@@ -30,6 +30,15 @@ async function produce(text, groupId, dedupId) {
     .promise();
 }
 
+async function updateUser(user) {
+  return await dynamoDB
+    .put({
+      TableName: "autoping-users",
+      Item: user
+    })
+    .promise();
+}
+
 async function updateDialog(chatId, cardId, initiatorId) {
   return await dynamoDB
     .put({
@@ -87,22 +96,40 @@ async function findDialog(chatId) {
     .promise();
 }
 
-module.exports.receiveOutboundMessage = async (event) => {
-  console.log("Outbound message received (webhook): " + JSON.stringify(event.body));
+module.exports.handleWebhookUpdate = async (event) => {
+  console.log("Received update via webhook: " + JSON.stringify(event.body));
+  const update = event.body;
+  const text = update.message.text;
+  if (text.startsWith("/start")) {
+    const payload = text.split(" ")[1];
+    const chatId = update.message.chat.id;
+    await handleBotRegistration(payload, chatId);
+  } else {
+    await handleTextMessage(update);
+  }
+}
 
-  const chatId = event.body.message.chat.id;
-  const messageId = chatId + "-" + event.body.update_id;
+async function handleBotRegistration(payload, chatId) {
+  const userId = payload;
+  const user = (await findUser(userId)).Item;
+  console.log("User: " + JSON.stringify(user));
+  user.chatId = chatId;
+  await updateUser(user);
+}
 
+async function handleTextMessage(update) {
+
+  const chatId = update.message.chat.id;
+  const messageId = chatId + "-" + update.update_id;
   const dialog = (await findDialog(chatId)).Item;
   console.log("Dialog: " + JSON.stringify(dialog));
 
   const cardId = dialog.cardId;
   const initiatorId = dialog.initiatorId;
-
   const message = {
     id: messageId,
-    text: event.body.message.text,
-    createdAt: event.body.message.date,
+    text: update.message.text,
+    createdAt: update.message.date,
     cardId: cardId,
     initiatorId: initiatorId,
     inbound: false
@@ -112,10 +139,16 @@ module.exports.receiveOutboundMessage = async (event) => {
   await produce(JSON.stringify(message), groupId, messageId);
 
   const messageRequest = {
-    chat_id: event.body.message.chat.id,
-    text: "Test Loopback: " + JSON.stringify(event.body)
+    chat_id: update.message.chat.id,
+    text: "Test Loopback: " + JSON.stringify(update)
   };
+
   await send(messageRequest);
+}
+
+module.exports.receiveOutboundMessage = async (event) => {
+  console.log("Outbound message received (webhook): " + JSON.stringify(event.body));
+
 }
 
 async function handleInboundMessage(message) {
@@ -161,3 +194,4 @@ module.exports.handleInboundMessageSqs = async (event) => {
     await handleInboundMessage(message);
   }
 }
+

@@ -30,7 +30,7 @@ provider:
 functions:
 
   receiveOutboundMessage:
-    handler: handler.receiveOutboundMessage
+    handler: handler.handleWebhookUpdate
     events:
       - http:
           path: messages/outbound
