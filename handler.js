@@ -138,12 +138,12 @@ async function handleTextMessage(update) {
   const groupId = "" + chatId;
   await produce(JSON.stringify(message), groupId, messageId);
 
-  const messageRequest = {
-    chat_id: update.message.chat.id,
-    text: "Test Loopback: " + JSON.stringify(update)
-  };
-
-  await send(messageRequest);
+  // const messageRequest = {
+  //   chat_id: update.message.chat.id,
+  //   text: "Test Loopback: " + JSON.stringify(update)
+  // };
+  //
+  // await send(messageRequest);
 }
 
 module.exports.receiveOutboundMessage = async (event) => {
