@@ -173,7 +173,7 @@ async function handleInboundMessage(message) {
 
   const messageRequest = {
     chat_id: chatId,
-    text: message.text,
+    text: [asset.name,card.description,message.text].join(": "),
     parse_mode: "markdown"
   };
 
