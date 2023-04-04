@@ -100,6 +100,7 @@ module.exports.handleWebhookUpdate = async (event) => {
   console.log("Received update via webhook: " + JSON.stringify(event.body));
   const update = event.body;
   const text = update.message.text;
+  //todo handle ordinary text with /start prefix
   if (text.startsWith("/start")) {
     const payload = text.split(" ")[1];
     const chatId = update.message.chat.id;
@@ -113,8 +114,17 @@ async function handleBotRegistration(payload, chatId) {
   const userId = payload;
   const user = (await findUser(userId)).Item;
   console.log("User: " + JSON.stringify(user));
+  //todo handle no user
   user.chatId = chatId;
   await updateUser(user);
+
+    const successMessageRequest = {
+      chat_id: chatId,
+      text: "Телеграмм бот успешно зарегистрирован. Теперь Вам будут приходить сообщения в Телеграмм.",
+      parse_mode: "markdown"
+    };
+
+    return send(successMessageRequest);
 }
 
 async function handleTextMessage(update) {
